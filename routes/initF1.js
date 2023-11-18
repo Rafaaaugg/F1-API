@@ -2,8 +2,8 @@ const express = require('express')
 const router = express.Router()
 const sequelize = require("../helpers/bd")
 
-const Season = require('../model/Season')
-const Race = require('../model/Race')
+const Season = require('../model/seasonModel')
+const Race = require('../model/raceModel')
 
 router.get('/',async (req, res) => {
 

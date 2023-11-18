@@ -1,20 +1,20 @@
 const {DataTypes} = require("sequelize")
 const sequelize = require("../helpers/bd")
-const Season = require('./Season')
-const Driver = require('./Driver')
+const Season = require('./seasonModel')
+const Driver = require('./driverModel')
 
 const RaceModel = sequelize.define("Race",
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-      unique: true
-    },
-    name:{
-      type: DataTypes.STRING,
+    {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true,
+            unique: true
+        },
+        name:{
+            type: DataTypes.STRING,
+        }
     }
-  }
 );
 
 RaceModel.belongsTo(Season, { foreignKey: 'season' }); // Relacionamento com Temporada
@@ -25,8 +25,8 @@ Season.hasMany(RaceModel, { foreignKey: 'season' }); // Uma Temporada pode ter v
 
 module.exports = {
   list: async function() {
-      const races = await RaceModel.findAll()
-      return races
+        const races = await RaceModel.findAll()
+        return races
   },
   
   save: async function(name, season, winner) {
@@ -38,8 +38,8 @@ module.exports = {
       return race
   },
 
-  update: async function(id, name, season, winner) {
-      return await RaceModel.update({name: name},{season: season},{winner: winner},{
+  update: async function(id, obj) {
+      return await RaceModel.update({name: obj.name},{season: obj.season},{winner: obj.winner},{
           where: { id: id }
       })
   },
