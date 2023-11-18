@@ -1,9 +1,8 @@
 var express = require('express');
 var path = require('path');
 require("dotenv").config()
-//var cookieParser = require('cookie-parser');
 
-var indexRouter = require('./routes/index');
+var indexRouter = require('./routes/initF1');
 var databaseRouter = require('./routes/initF1');
 
 var app = express();
