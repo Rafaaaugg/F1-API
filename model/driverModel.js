@@ -1,31 +1,32 @@
 const {DataTypes, Op} = require("sequelize")
 const sequelize = require("../helpers/bd")
 const RaceModel = require('./raceModel')
+const Season = require('./seasonModel')
 
-const SeasonModel = sequelize.define('Season', 
+const DriverModel = sequelize.define('Driver', 
     {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
-        year: DataTypes.INTEGER,
-        driverChamp: DataTypes.STRING,
-        teamChamp: DataTypes.STRING
+        name: DataTypes.STRING,
+        champ: DataTypes.INTEGER
     }
 )
 
-SeasonModel.hasMany(RaceModel, { foreignKey: 'races' });
+DriverModel.hasMany(RaceModel, { foreignKey: 'wins' });
+DriverModel.hasMany(RaceModel, { foreignKey: 'wins' });
 
 module.exports = {
     list: async function() {
-        const seasons = await SeasonModel.findAll()
-        return seasons
+        const drivers = await DriverModel.findAll()
+        return drivers
     },
     
     save: async function(year, driverChamp, teamChamp) {
-        const season = await SeasonModel.create({
-            year: year,
+        const driver = await DriverModel.create({
+            name: year,
             driverChamp: driverChamp,
             teamChamp: teamChamp
         })
