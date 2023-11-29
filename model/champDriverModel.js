@@ -23,22 +23,24 @@ module.exports = {
         return drivers
     },
     
-    save: async function(name) {
+    save: async function(name, wins, polePosition, podium, championship) {
         const driver = await DriverModel.create({
             name: name,
+            wins: wins,
+            polePosition: polePosition,
+            podium: podium,
+            championship: championship
         })
-        
-        return season
+        return driver
     },
 
-    update: async function(id, year, driverChamp, teamChamp) {
-        return await SeasonModel.update({year: year},{driverChamp: driverChamp},{teamChamp: teamChamp}, {
+    update: async function(id, name, wins, polePosition, podium, championship) {
+        return await SeasonModel.update({name: name},{wins: wins},{polePosition: polePosition},{podium: podium},{championship: championship}, {
             where: { id: id }
         })
     },
 
     delete: async function(id) {
-
         return await DriverModel.destroy({where: { id: id }})
     },
 
