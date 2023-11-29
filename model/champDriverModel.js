@@ -1,7 +1,7 @@
-const {DataTypes} = require("sequelize")
+const { DataTypes } = require("sequelize")
 const sequelize = require("../helpers/bd")
 
-const DriverModel = sequelize.define('Driver', 
+const DriverModel = sequelize.define('Driver',
     {
         id: {
             type: DataTypes.INTEGER,
@@ -9,6 +9,7 @@ const DriverModel = sequelize.define('Driver',
             primaryKey: true
         },
         name: DataTypes.STRING,
+        country: DataTypes.STRING,
         wins: DataTypes.INTEGER,
         polePosition: DataTypes.INTEGER,
         podium: DataTypes.INTEGER,
@@ -18,14 +19,15 @@ const DriverModel = sequelize.define('Driver',
 
 
 module.exports = {
-    list: async function() {
+    list: async function () {
         const drivers = await DriverModel.findAll()
         return drivers
     },
-    
-    save: async function(name, wins, polePosition, podium, championship) {
+
+    save: async function (name, country, wins, polePosition, podium, championship) {
         const driver = await DriverModel.create({
             name: name,
+            country: country,
             wins: wins,
             polePosition: polePosition,
             podium: podium,
@@ -34,17 +36,17 @@ module.exports = {
         return driver
     },
 
-    update: async function(id, name, wins, polePosition, podium, championship) {
-        return await SeasonModel.update({name: name},{wins: wins},{polePosition: polePosition},{podium: podium},{championship: championship}, {
+    update: async function (id, name, country, wins, polePosition, podium, championship) {
+        return await SeasonModel.update({ name: name }, { country: country }, { wins: wins }, { polePosition: polePosition }, { podium: podium }, { championship: championship }, {
             where: { id: id }
         })
     },
 
-    delete: async function(id) {
-        return await DriverModel.destroy({where: { id: id }})
+    delete: async function (id) {
+        return await DriverModel.destroy({ where: { id: id } })
     },
 
-    getById: async function(id) {
+    getById: async function (id) {
         return await DriverModel.findByPk(id)
     },
 

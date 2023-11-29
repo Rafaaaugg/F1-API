@@ -2,6 +2,7 @@ const {DataTypes, Op} = require("sequelize")
 const sequelize = require("../helpers/bd")
 const constructor = require('./champConstructorModel')
 const driver = require('./champDriverModel')
+const raceModel = require("./raceModel")
 
 const SeasonModel = sequelize.define('Season', 
     {
@@ -11,12 +12,15 @@ const SeasonModel = sequelize.define('Season',
             primaryKey: true
         },
         year: DataTypes.INTEGER,
-        races: DataTypes.ARRAY
     }
 )
 
 SeasonModel.belongsTo(constructor.Model, { foreignKey: 'constructorChampion' });
 SeasonModel.belongsTo(driver.Model, { foreignKey: 'driverChampion' });
+SeasonModel.belongsTo(raceModel.Model, {
+    foreignKey: 'race'
+})
+SeasonModel.hasMany(raceModel.Model, {foreignKey: 'races'})
 
 module.exports = {
 

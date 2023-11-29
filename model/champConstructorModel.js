@@ -1,7 +1,7 @@
-const {DataTypes} = require("sequelize")
+const { DataTypes } = require("sequelize")
 const sequelize = require("../helpers/bd")
 
-const ConstructorModel = sequelize.define('Constructor', 
+const ConstructorModel = sequelize.define('Constructor',
     {
         id: {
             type: DataTypes.INTEGER,
@@ -9,6 +9,7 @@ const ConstructorModel = sequelize.define('Constructor',
             primaryKey: true
         },
         name: DataTypes.STRING,
+        contry: DataTypes.STRING,
         wins: DataTypes.INTEGER,
         polePosition: DataTypes.INTEGER,
         podium: DataTypes.INTEGER,
@@ -19,14 +20,15 @@ const ConstructorModel = sequelize.define('Constructor',
 
 
 module.exports = {
-    list: async function() {
+    list: async function () {
         const constructors = await ConstructorModel.findAll()
         return constructors
     },
 
-    save: async function(name, wins, polePosition, podium, driverCampionship, constructorChampionship) {
+    save: async function (name, contry, wins, polePosition, podium, driverCampionship, constructorChampionship) {
         const constructor = await ConstructorModel.create({
             name: name,
+            contry: contry,
             wins: wins,
             polePosition: polePosition,
             podium: podium,
@@ -36,17 +38,17 @@ module.exports = {
         return constructor
     },
 
-    update: async function(id, name, wins, polePosition, podium, driverCampionship, constructorChampionship) {
-        return await SeasonModel.update({name: name},{wins: wins},{polePosition: polePosition},{podium: podium},{driverCampionship: driverCampionship},{constructorChampionship: constructorChampionship}, {
+    update: async function (id, name, contry, wins, polePosition, podium, driverCampionship, constructorChampionship) {
+        return await SeasonModel.update({ name: name }, { contry: contry }, { wins: wins }, { polePosition: polePosition }, { podium: podium }, { driverCampionship: driverCampionship }, { constructorChampionship: constructorChampionship }, {
             where: { id: id }
         })
     },
 
-    delete: async function(id) {
-        return await ConstructorModel.destroy({where: { id: id }})
+    delete: async function (id) {
+        return await ConstructorModel.destroy({ where: { id: id } })
     },
 
-    getById: async function(id) {
+    getById: async function (id) {
         return await ConstructorModel.findByPk(id)
     },
 
