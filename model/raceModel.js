@@ -1,7 +1,6 @@
 const {DataTypes} = require("sequelize")
 const sequelize = require("../helpers/bd")
-const Season = require('./seasonModel')
-const Driver = require('./driverModel')
+
 
 const RaceModel = sequelize.define("Race",
     {
@@ -17,29 +16,22 @@ const RaceModel = sequelize.define("Race",
     }
 );
 
-RaceModel.belongsTo(Season, { foreignKey: 'season' }); // Relacionamento com Temporada
-RaceModel.belongsTo(Driver, { foreignKey: 'winner' }); // Relacionamento com Piloto (vencedor)
-
-Driver.hasMany(RaceModel, { foreignKey: 'winner' }); // Um Piloto pode vencer várias corridas
-Season.hasMany(RaceModel, { foreignKey: 'season' }); // Uma Temporada pode ter várias corridas
-
 module.exports = {
   list: async function() {
         const races = await RaceModel.findAll()
         return races
   },
   
-  save: async function(name, season, winner) {
+  save: async function(name, season) {
       const race = await RaceModel.create({
           name: name,
           season: season,
-          winner: winner
       })
       return race
   },
 
   update: async function(id, obj) {
-      return await RaceModel.update({name: obj.name},{season: obj.season},{winner: obj.winner},{
+      return await RaceModel.update({name: obj.name},{season: obj.season},{
           where: { id: id }
       })
   },

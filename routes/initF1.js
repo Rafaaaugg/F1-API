@@ -4,55 +4,230 @@ const sequelize = require("../helpers/bd")
 
 const Season = require('../model/seasonModel')
 const Race = require('../model/raceModel')
+const Driver = require('../model/driverModel')
 
 router.get('/',async (req, res) => {
 
   await sequelize.sync({force:true})
 
+    //season year, races
+    //champilots nome,pais,vitorias,poles,podius,championship
+    //chamcosntructors nome,pais,vitorias,poles,podiuns,chamConstructors, chamDrivers
+    /* 
+    let autores = [
+        "J. K. Rowling", "J. R. R. Tolkien", "Aldous Huxley", "George Orwell", "Clarice Lispector"
+    ]
+    let lautores = []
+    for (let i = 0; i < autores.length; i++) {
+        lautores.push(await AuthorModel.save(autores[i]))
+    }
+
+    let book1 = await BookModel.save("Harry Potter e a Pedra Filosofal", lautores[0].codigo, "Editora 1", 1997)
+    let book2 = await BookModel.save("O Senhor dos Anéis", lautores[1], "Editora 2", 1950)
+    let book3 = await BookModel.save("Admirável Mundo Novo", "Aldous Huxley", "Editora 1", 1932)
+
+    llivros = [book1, book2, book3]
+    res.json({status:true, autores: lautores, livros: llivros})
+    */
     let years = [
-        "1950","1951","1952","1953","1954","1955","1956","1957","1958","1959",
-        "1960","1961","1962","1963","1964","1965","1966","1967","1968","1969",
-        "1970","1971","1972","1973","1974","1975","1976","1977","1978","1979",
-        "1980","1981","1982","1983","1984","1985","1986","1987","1988","1989",
-        "1990","1991","1992","1993","1994","1995","1996","1997","1998","1999",
-        "2000","2001","2002","2003","2004","2005","2006","2007","2008","2009",
-        "2010","2011","2012","2013","2014","2015","2016","2017","2018","2019",
-        "2020","2021","2022","2023"
+        "1950","1960","1970","1980","1990","2000","2010","2020"
     ];
-    let chamPilot = [
-        "Giuseppe Farina","Juan Manuel Fangio","Alberto Ascari","Alberto Ascari",
-        "Juan Manuel Fangio","Juan Manuel Fangio","Juan Manuel Fangio","Juan Manuel Fangio",
-        "Mike Hawthorn","Jack Brabham","Jack Brabham","Phil Hill","Graham Hill","Jim Clark",
-        "John Surtees","Jim Clark","Jack Brabham","Denny Hulme","Graham Hill",
-        "Jackie Stewart","Jochen Rindt","Jackie Stewart","Emerson Fittipaldi","Jackie Stewart",
-        "Emerson Fittipaldi","Niki Lauda","James Hunt","Niki Lauda","Mario Andretti",
-        "Jody Scheckter","Alan Jones","Nelson Piquet","Keke Rosberg","Nelson Piquet",
-        "Niki Lauda","Alain Prost","Alain Prost","Nelson Piquet","Ayrton Senna","Alain Prost",
-        "Ayrton Senna","Ayrton Senna","Nigel Mansell","Alain Prost","Michael Schumacher",
-        "Michael Schumacher","Damon Hill","Jacques Villeneuve","Mika Häkkinen","Mika Häkkinen",
-        "Michael Schumacher","Michael Schumacher","Michael Schumacher","Michael Schumacher",
-        "Michael Schumacher","Fernando Alonso","Fernando Alonso","Kimi Räikkönen","Lewis Hamilton",
-        "Jenson Button","Sebastian Vettel","Sebastian Vettel","Sebastian Vettel","Sebastian Vettel",
-        "Lewis Hamilton","Lewis Hamilton","Nico Rosberg","Lewis Hamilton","Lewis Hamilton",
-        "Lewis Hamilton","Lewis Hamilton","Max Verstappen" ,"Max Verstappen","Max Verstappen"
+    
+    let champPilots = [
+        //podium vitoria e 2 e 3
+        ("Giuseppe Farina","Italy",5,5,20,1),("Jack Brabham","Australia",14,13,31,3),
+        ("Jochen Rindt","Austria",6,10,13,1),("Alan Jones","Austria",12,6,24,1),
+        ("Ayrton Senna","Brazil",41,65,80,3),("Michael Schumacher","Germany",91,68,155,7),
+        ("Sebastian Vettel","Germany",53,57,122,4),("Lewis Hamilton","United Kingdom",103,104,197,7)
     ];
-    let chamTeam = [
-            "Alfa Romeo", "Alfa Romeo", "Ferrari", "Ferrari",
-            "Mercedes", "Mercedes", "Ferrari", "Maserati", "Ferrari",
-            "Cooper", "Cooper", "Ferrari", "BRM", "Lotus",
-            "Ferrari", "Lotus", "McLaren", "McLaren", "Lotus",
-            "Matra", "Lotus", "Tyrrell", "Lotus", "Tyrrell",
-            "McLaren", "Ferrari", "McLaren", "Ferrari","Lotus",
-            "Ferrari", "Williams","Brabham", "Williams", "Brabham",
-            "McLaren", "McLaren", "McLaren", "Williams", "McLaren",
-            "McLaren", "McLaren", "McLaren", "Williams", "Williams",
-            "Benetton", "Benetton", "Williams", "Williams", "McLaren", 
-            "McLaren","Ferrari", "Ferrari", "Ferrari", "Ferrari", 
-            "Ferrari","Renault", "Renault", "Ferrari", "McLaren",
-            "Brawn", "Red Bull", "Red Bull", "Red Bull", "Red Bull",
-            "Mercedes", "Mercedes", "Mercedes", "Mercedes", "Mercedes",
-            "Mercedes", "Mercedes", "Red Bull", "Red Bull", "Red Bull"
+
+    let champTeam = [ 
+            ("Alfa Romeo","Italy",10,12,26,0,2), ("Cooper","United Kingdom",16,11,58,2,2),
+            ("Lotus","United Kingdom",81,107,197,7,6), ("Williams","United Kingdom",114,128,313,9,7),
+            ("McLaren","United Kingdom",183,156,503,8,12), ("Ferrari","Italy",243,249,807,16,15),
+            ("Red Bull","United Kingdom",113,95,264,6,7), ("Mercedes","Germany",125,137,289,8,9)
     ];
+    
+    let races = [
+
+        ["THE BRITISH GRAND PRIX",
+        "THE MONACO GRAND PRIX",
+        "THE INDIANAPOLIS GRAND PRIX",
+        "THE SWITZERLAND GRAND PRIX",
+        "THE BELGIUM GRAND PRIX",
+        "THE FRENCH GRAND PRIX",
+        "THE ITALIAN GRAND PRIX"],
+
+        ["THE BRAZILIAN GRAND PRIX",
+        "THE PORTUGUESE GRAND PRIX",
+        "THE SAN MARINO GRAND PRIX",
+        "THE MONACO GRAND PRIX",
+        "THE CANADIAN GRAND PRIX",
+        "THE DETROIT GRAND PRIX",
+        "THE FRENCH GRAND PRIX",
+        "THE BRITISH GRAND PRIX",
+        "THE GERMANY GRAND PRIX",
+        "THE AUSTRIAN GRAND PRIX",
+        "THE NETHERLANDS GRAND PRIX",
+        "THE ITALIAN GRAND PRIX",
+        "THE BELGIUM GRAND PRIX",
+        "THE EUROPEAN GRAND PRIX",
+        "THE SOUTH AFRICA GRAND PRIX",
+        "THE AUSTRALIAN GRAND PRIX"],
+
+        ["THE BRAZILIAN GRAND PRIX",
+        "THE SPANISH GRAND PRIX",
+        "THE SAN MARINO GRAND PRIX",
+        "THE MONACO GRAND PRIX",
+        "THE BELGIUM GRAND PRIX",
+        "THE CANADIAN GRAND PRIX",
+        "THE DETROIT GRAND PRIX",
+        "THE FRENCH GRAND PRIX",
+        "THE BRITISH GRAND PRIX",
+        "THE GERMANY GRAND PRIX",
+        "THE HUNGARIAN GRAND PRIX",
+        "THE AUSTRIAN GRAND PRIX",
+        "THE ITALIAN GRAND PRIX",
+        "THE PORTUGUESE GRAND PRIX",
+        "THE MEXICAN GRAND PRIX",
+        "THE AUSTRALIAN GRAND PRIX"],
+
+        ["THE BRAZILIAN GRAND PRIX",
+        "THE SAN MARINO GRAND PRIX",
+        "THE BELGIUM GRAND PRIX",
+        "THE MONACO GRAND PRIX",
+        "THE DETROIT GRAND PRIX",
+        "THE FRENCH GRAND PRIX",
+        "THE BRITISH GRAND PRIX",
+        "THE GERMANY GRAND PRIX",
+        "THE HUNGARIAN GRAND PRIX",
+        "THE AUSTRIAN GRAND PRIX",
+        "THE ITALIAN GRAND PRIX",
+        "THE PORTUGUESE GRAND PRIX",
+        "THE SPANISH GRAND PRIX",
+        "THE MEXICAN GRAND PRIX",
+        "THE JAPANESE GRAND PRIX",
+        "THE AUSTRALIAN GRAND PRIX"],
+
+        ["THE BRAZILIAN GRAND PRIX",
+        "THE SAN MARINO GRAND PRIX",
+        "THE MONACO GRAND PRIX",
+        "THE MEXICAN GRAND PRIX",
+        "THE CANADIAN GRAND PRIX",
+        "THE DETROIT GRAND PRIX",
+        "THE FRENCH GRAND PRIX",
+        "THE BRITISH GRAND PRIX",
+        "THE GERMANY GRAND PRIX",
+        "THE HUNGARIAN GRAND PRIX",
+        "THE BELGIUM GRAND PRIX",
+        "THE ITALIAN GRAND PRIX",
+        "THE PORTUGUESE GRAND PRIX",
+        "THE SPANISH GRAND PRIX",
+        "THE JAPANESE GRAND PRIX",
+        "THE AUSTRALIAN GRAND PRIX"],
+
+        ["THE BRAZILIAN GRAND PRIX",
+        "THE SAN MARINO GRAND PRIX",
+        "THE MONACO GRAND PRIX",
+        "THE MEXICAN GRAND PRIX",
+        "THE UNITED STATES GRAND PRIX",
+        "THE CANADIAN GRAND PRIX",
+        "THE FRENCH GRAND PRIX",
+        "THE BRITISH GRAND PRIX",
+        "THE GERMANY GRAND PRIX",
+        "THE HUNGARIAN GRAND PRIX",
+        "THE BELGIUM GRAND PRIX",
+        "THE ITALIAN GRAND PRIX",
+        "THE PORTUGUESE GRAND PRIX",
+        "THE SPANISH GRAND PRIX",
+        "THE JAPANESE GRAND PRIX",
+        "THE AUSTRALIAN GRAND PRIX"],
+
+        ["THE UNITED STATES GRAND PRIX",
+        "THE BRAZILIAN GRAND PRIX",
+        "THE SAN MARINO GRAND PRIX",
+        "THE MONACO GRAND PRIX",
+        "THE CANADIAN GRAND PRIX",
+        "THE MEXICAN GRAND PRIX",
+        "THE FRENCH GRAND PRIX",
+        "THE BRITISH GRAND PRIX",
+        "THE GERMANY GRAND PRIX",
+        "THE HUNGARIAN GRAND PRIX",
+        "THE BELGIUM GRAND PRIX",
+        "THE ITALIAN GRAND PRIX",
+        "THE PORTUGUESE GRAND PRIX",
+        "THE SPANISH GRAND PRIX",
+        "THE JAPANESE GRAND PRIX",
+        "THE AUSTRALIAN GRAND PRIX"],
+
+        ["THE UNITED STATES GRAND PRIX",
+        "THE BRAZILIAN GRAND PRIX",
+        "THE SAN MARINO GRAND PRIX",
+        "THE MONACO GRAND PRIX",
+        "THE CANADIAN GRAND PRIX",
+        "THE MEXICAN GRAND PRIX",
+        "THE FRENCH GRAND PRIX",
+        "THE BRITISH GRAND PRIX",
+        "THE GERMANY GRAND PRIX",
+        "THE HUNGARIAN GRAND PRIX",
+        "THE BELGIUM GRAND PRIX",
+        "THE ITALIAN GRAND PRIX",
+        "THE PORTUGUESE GRAND PRIX",
+        "THE SPANISH GRAND PRIX",
+        "THE JAPANESE GRAND PRIX",
+        "THE AUSTRALIAN GRAND PRIX"],
+
+        ["THE SOUTH AFRICA GRAND PRIX",
+        "THE MEXICAN GRAND PRIX",
+        "THE BRAZILIAN GRAND PRIX",
+        "THE SPANISH GRAND PRIX",
+        "THE SAN MARINO GRAND PRIX",
+        "THE MONACO GRAND PRIX",
+        "THE CANADIAN GRAND PRIX",
+        "THE FRENCH GRAND PRIX",
+        "THE BRITISH GRAND PRIX",
+        "THE GERMANY GRAND PRIX",
+        "THE HUNGARIAN GRAND PRIX",
+        "THE BELGIUM GRAND PRIX",
+        "THE ITALIAN GRAND PRIX",
+        "THE PORTUGUESE GRAND PRIX",
+        "THE JAPANESE GRAND PRIX",
+        "THE AUSTRALIAN GRAND PRIX"],
+
+        ["THE SOUTH AFRICA GRAND PRIX",
+        "THE BRAZILIAN GRAND PRIX",
+        "THE EUROPEAN GRAND PRIX",
+        "THE SAN MARINO GRAND PRIX",
+        "THE SPANISH GRAND PRIX",
+        "THE MONACO GRAND PRIX",
+        "THE CANADIAN GRAND PRIX",
+        "THE FRENCH GRAND PRIX",
+        "THE BRITISH GRAND PRIX",
+        "THE GERMANY GRAND PRIX",
+        "THE HUNGARIAN GRAND PRIX",
+        "THE BELGIUM GRAND PRIX",
+        "THE ITALIAN GRAND PRIX",
+        "THE PORTUGUESE GRAND PRIX",
+        "THE JAPANESE GRAND PRIX",
+        "THE AUSTRALIAN GRAND PRIX"],
+
+        ["THE BRAZILIAN GRAND PRIX",
+        "THE PACIFIC GRAND PRIX",
+        "THE SAN MARINO GRAND PRIX",
+        "THE MONACO GRAND PRIX",
+        "THE SPANISH GRAND PRIX",
+        "THE CANADIAN GRAND PRIX",
+        "THE FRENCH GRAND PRIX",
+        "THE BRITISH GRAND PRIX",
+        "THE GERMANY GRAND PRIX",
+        "THE HUNGARIAN GRAND PRIX",
+        "THE BELGIUM GRAND PRIX",
+        "THE ITALIAN GRAND PRIX",
+        "THE PORTUGUESE GRAND PRIX",
+        "THE EUROPEAN GRAND PRIX",
+        "THE JAPANESE GRAND PRIX",
+        "THE AUSTRALIAN GRAND PRIX"]
+    ]
 })
 
 module.exports = router

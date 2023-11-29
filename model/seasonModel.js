@@ -1,6 +1,7 @@
 const {DataTypes, Op} = require("sequelize")
 const sequelize = require("../helpers/bd")
 const RaceModel = require('./raceModel')
+const DriverModel = require('./driverModel')
 
 const SeasonModel = sequelize.define('Season', 
     {
@@ -14,8 +15,8 @@ const SeasonModel = sequelize.define('Season',
         teamChamp: DataTypes.STRING
     }
 )
-
-SeasonModel.hasMany(RaceModel, { foreignKey: 'races' });
+RaceModel.Model.belongsTo(SeasonModel, { foreignKey: 'SeasonId' });
+DriverModel.Model.belongsTo(SeasonModel, { foreignKey: 'SeasonId' });
 
 module.exports = {
     list: async function() {

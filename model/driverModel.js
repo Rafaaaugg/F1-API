@@ -1,7 +1,5 @@
-const {DataTypes, Op} = require("sequelize")
+const {DataTypes} = require("sequelize")
 const sequelize = require("../helpers/bd")
-const RaceModel = require('./raceModel')
-const Season = require('./seasonModel')
 
 const DriverModel = sequelize.define('Driver', 
     {
@@ -11,12 +9,13 @@ const DriverModel = sequelize.define('Driver',
             primaryKey: true
         },
         name: DataTypes.STRING,
-        champ: DataTypes.INTEGER
+        wins: DataTypes.INTEGER,
+        polePosition: DataTypes.INTEGER,
+        podium: DataTypes.INTEGER,
+        championship: DataTypes.INTEGER
     }
 )
 
-DriverModel.hasMany(RaceModel, { foreignKey: 'wins' });
-DriverModel.hasMany(RaceModel, { foreignKey: 'wins' });
 
 module.exports = {
     list: async function() {
@@ -24,11 +23,9 @@ module.exports = {
         return drivers
     },
     
-    save: async function(year, driverChamp, teamChamp) {
+    save: async function(name) {
         const driver = await DriverModel.create({
-            name: year,
-            driverChamp: driverChamp,
-            teamChamp: teamChamp
+            name: name,
         })
         
         return season
@@ -42,16 +39,12 @@ module.exports = {
 
     delete: async function(id) {
 
-        return await SeasonModel.destroy({where: { id: id }})
+        return await DriverModel.destroy({where: { id: id }})
     },
 
     getById: async function(id) {
-        return await SeasonModel.findByPk(id)
+        return await DriverModel.findByPk(id)
     },
 
-    getByYear: async function(year) {
-        return await SeasonModel.findOne({where: {year:year} })
-    },
-
-    Model: SeasonModel
+    Model: DriverModel
 }

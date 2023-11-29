@@ -20,11 +20,11 @@ router.get("/:name", (req, res) => {
 })
 
 router.post("/", (req, res) => {
-    const {name, season, winner} = req.body
+    const {name, season} = req.body
 
     //TODO validar os campos
 
-    RaceDAO.save(name, season, winner).then(race => {
+    RaceDAO.save(name, season).then(race => {
         res.json(sucess(race))
     }).catch(err => {
         console.log(err)
@@ -34,13 +34,12 @@ router.post("/", (req, res) => {
 
 router.put("/:id", (req, res) => {
     const {id} = req.params
-    const {name, season, winner} = req.body
+    const {name, season} = req.body
 
     //TODO validar os campos
     let obj = {}
     if (name) obj.name = name
     if (season) obj.season = season
-    if (winner) obj.winner = winner
 
     if (obj == {}) {
         return res.status(500).json(fail("Nenhum atributo foi modificado"))
