@@ -3,8 +3,8 @@ const router = express.Router()
 const sequelize = require("../helpers/bd")
 
 const Season = require('../model/seasonModel')
-const constructor = require('../model/champConstructorModel')
-const driver = require('../model/champDriverModel')
+const constructor = require('../model/constructorChampModel')
+const driver = require('../model/driverChampModel')
 
 router.get('/', async (req, res) => {
 

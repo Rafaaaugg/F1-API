@@ -3,7 +3,11 @@ var path = require('path');
 require("dotenv").config()
 
 var indexRouter = require('./routes/initF1');
-var registerRouter = require('./routes/registerAPI');
+//var registerRouter = require('./routes/registerAPI');
+var seasonRouter = require('./routes/seasonAPI');
+var driverChampRouter = require('./routes/driverChampAPI');
+var constructorChampRouter = require('./routes/constructorChampAPI');
+var racesRouter = require('./routes/racesAPI');
 
 var app = express();
 
@@ -11,9 +15,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/', indexRouter);
-app.use('/register', registerRouter);
+//app.use('/register', registerRouter);
 app.use('/season', seasonRouter);
-app.use('/driver', driverRouter);
+app.use('/driver', driverChampRouter);
+app.use('/constructor', constructorChampRouter);
 app.use('/races', racesRouter);
 
 app.use(function(err, req, res, next) {

@@ -52,5 +52,10 @@ module.exports = {
         return await ConstructorModel.findByPk(id)
     },
 
+    getByName: async function (name) {
+        const constructors = await ConstructorModel.findOne({ where: { name: name } })
+        return constructors
+    },
+
     Model: ConstructorModel
 }

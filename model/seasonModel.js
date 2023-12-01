@@ -1,8 +1,8 @@
 const {DataTypes, Op} = require("sequelize")
 const sequelize = require("../helpers/bd")
-const constructor = require('./champConstructorModel')
-const driver = require('./champDriverModel')
-const raceModel = require("./raceModel")
+const constructor = require('./constructorChampModel')
+const driver = require('./driverChampModel')
+const race = require("./raceModel")
 
 const SeasonModel = sequelize.define('Season', 
     {
@@ -17,15 +17,15 @@ const SeasonModel = sequelize.define('Season',
 
 SeasonModel.belongsTo(constructor.Model, { foreignKey: 'constructorChampion' });
 SeasonModel.belongsTo(driver.Model, { foreignKey: 'driverChampion' });
-SeasonModel.belongsTo(raceModel.Model, {
+SeasonModel.belongsTo(race.Model, {
     foreignKey: 'race'
 })
-SeasonModel.hasMany(raceModel.Model, {foreignKey: 'races'})
+SeasonModel.hasMany(race.Model, {foreignKey: 'races'})
 
 module.exports = {
 
     list: async function() {
-        const seasons = await SeasonModel.findAll({ include: constructor.Model },{ include: driver.Model })
+        const seasons = await SeasonModel.findAll({ include: constructor.Model },{ include: driver.Model },{ include: race.Model })
         return seasons
     },
     
