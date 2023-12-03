@@ -1,12 +1,12 @@
 module.exports = {
-  sucess: function(obj, name) {
-    let resp = {status: true}
-    if (name) resp[name] = obj
-    else resp.obj = obj
+  sucess: function (obj, name) {
+    let resp = { status: true };
+    if (name) resp[name] = obj;
+    else resp.obj = obj;
 
-    return resp
+    return resp;
   },
-  fail: function(message) {
-    return {status: false, message: message}
-  }
-}
+  fail: function (message) {
+    return { status: false, message: message };
+  },
+};

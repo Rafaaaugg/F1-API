@@ -1,51 +1,55 @@
-const {DataTypes, Op} = require("sequelize")
-const sequelize = require("../helpers/bd")
-const seasonModel = require("./seasonModel")
+const { DataTypes, Op } = require("sequelize");
+const sequelize = require("../helpers/bd");
+const seasonModel = require("./seasonModel");
 
-const RaceModel = sequelize.define('Race', 
-    {
-        id: {
-            type: DataTypes.INTEGER,
-            autoIncrement: true,
-            primaryKey: true
-        },
-        name: DataTypes.STRING
-    }
-)
-
+const RaceModel = sequelize.define("Race", {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  name: DataTypes.STRING,
+});
 
 module.exports = {
-    list: async function() {
-        const races = await RaceModel.findAll()
-        return races
-    },
-    
-    save: async function(name) {
-        const race = await RaceModel.create({
-            name: name
-        })
-        return race
-    },
+  list: async function () {
+    const races = await RaceModel.findAll();
+    return races;
+  },
 
-    update: async function(id, name) {
-        return await RaceModel.update({name: name}, {
-            where: { codigo: id }
-        })
-    },
+  save: async function (name) {
+    const race = await RaceModel.create({
+      name: name,
+    });
+    return race;
+  },
 
-    delete: async function(id) {
-        return await RaceModel.destroy({where: { codigo: id }})
-    },
+  update: async function (id, name) {
+    return await RaceModel.update(
+      { name: name },
+      {
+        where: { codigo: id },
+      }
+    );
+  },
 
-    getById: async function(id) {
-        return await RaceModel.findByPk(id)
-    },
+  delete: async function (id) {
+    return await RaceModel.destroy({ where: { codigo: id } });
+  },
 
-    getByName: async function(name) {
-        return await RaceModel.findOne({where: {name: {
-            [Op.like]: '%' + name + '%'
-        } }})
-    },
+  getById: async function (id) {
+    return await RaceModel.findByPk(id);
+  },
 
-    Model: RaceModel
-}
+  getByName: async function (name) {
+    return await RaceModel.findOne({
+      where: {
+        name: {
+          [Op.like]: "%" + name + "%",
+        },
+      },
+    });
+  },
+
+  Model: RaceModel,
+};
