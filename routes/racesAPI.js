@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const { sucess, fail } = require("../helpers/resposta");
+const Auth = require('../helpers/auth')
 const RaceDAO = require("../model/raceModel");
 
 router.get("/", (req, res) => {
@@ -10,7 +11,7 @@ router.get("/", (req, res) => {
   });
 });
 
-router.get("/:name", (req, res) => {
+router.get("/:name", Auth.validaAcesso, (req, res) => {
   RaceDAO.getByName(req.params.name)
     .then((race) => {
       res.json(sucess(race));
@@ -21,7 +22,7 @@ router.get("/:name", (req, res) => {
     });
 });
 
-router.post("/", (req, res) => {
+router.post("/", Auth.validaAcesso, (req, res) => {
   const { name, season } = req.body;
 
   //TODO validar os campos
@@ -36,7 +37,7 @@ router.post("/", (req, res) => {
     });
 });
 
-router.put("/:id", (req, res) => {
+router.put("/:id", Auth.validaAcesso, (req, res) => {
   const { id } = req.params;
   const { name, season } = req.body;
 
@@ -60,7 +61,7 @@ router.put("/:id", (req, res) => {
     });
 });
 
-router.delete("/:id", (req, res) => {
+router.delete("/:id", Auth.validaAcesso, (req, res) => {
   RaceDAO.delete(req.params.id)
     .then((race) => {
       if (race) res.json(sucess(race));

@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const sequelize = require("../helpers/bd");
-
+const Auth = require('../helpers/auth')
 const Season = require("../model/seasonModel");
 const constructor = require("../model/constructorChampModel");
 const driver = require("../model/driverChampModel");
 
-router.get("/", async (req, res) => {
+router.get("/", Auth.validaAcesso, async (req, res) => {
   await sequelize.sync({ force: true });
 
   //season year, races

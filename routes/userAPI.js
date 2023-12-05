@@ -1,20 +1,18 @@
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken')
 const express = require("express");
 const router = express.Router();
 
 router.post("/", (req, res) => {
-  let { usuario, senha, tipo } = req.body;
+  let { usuario, senha } = req.body
 
   if (usuario != "" && senha != "") {
-    jwt.sign({ usuario: usuario, tipo: "Comum" }, "Rafael3948230*&!", {
-      expiresIn: "1 min",
-    });
-    res.json({ logged: true, token: token });
+    let token = jwt.sign({ usuario: usuario }, 'Rafael3948230*&!', {
+      expiresIn: '10 min',
+    })
+    res.json({ logged: true, token: token })
   } else {
-    res
-      .status(403)
-      .json({ logged: false, mensagem: "Usuario e Senha inválidos" });
+    res.status(403).json({ logged: false, mensagem: 'Usuario e Senha inválidos' })
   }
-});
+})
 
 module.exports = router;
