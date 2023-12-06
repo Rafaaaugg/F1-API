@@ -24,10 +24,9 @@ router.get("/:name", Auth.validaAcesso, (req, res) => {
 
 router.post("/", Auth.validaAcesso, (req, res) => {
   if (req.isAdmin) {
-    const { name, season } = req.body;
+    const { name} = req.body;
 
-
-    RaceDAO.save(name, season)
+    RaceDAO.save(name)
       .then((race) => {
         res.json(sucess(race));
       })
@@ -43,11 +42,10 @@ router.post("/", Auth.validaAcesso, (req, res) => {
 router.put("/:id", Auth.validaAcesso, (req, res) => {
   if (req.isAdmin) {
     const { id } = req.params;
-    const { name, season } = req.body;
+    const { name} = req.body;
 
     let obj = {};
     if (name) obj.name = name;
-    if (season) obj.season = season;
 
     if (obj == {}) {
       return res.status(500).json(fail("Nenhum atributo foi modificado"));

@@ -42,13 +42,10 @@ module.exports = {
   },
 
   getByName: async function (name) {
-    return await RaceModel.findOne({
-      where: {
-        name: {
-          [Op.like]: "%" + name + "%",
-        },
-      },
+    const races = await RaceModel.findOne({
+      where: { name: name },
     });
+    return races;
   },
 
   Model: RaceModel,

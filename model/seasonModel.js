@@ -30,21 +30,21 @@ module.exports = {
     return seasons;
   },
 
-  save: async function (year, driverChamp, teamChamp, races) {
+  save: async function (year, constructorChampion, driverChampion, races) {
     const season = await SeasonModel.create({
       year: year,
-      driverChamp: driverChamp,
-      teamChamp: teamChamp,
+      constructorChampion: constructorChampion,
+      driverChampion: driverChampion,
       races: races,
     });
     return season;
   },
 
-  update: async function (id, year, driverChamp, teamChamp, races) {
+  update: async function (id, year, constructorChampion, driverChampion, races) {
     return await SeasonModel.update(
       { year: year },
-      { driverChamp: driverChamp },
-      { teamChamp: teamChamp },
+      { constructorChampion: constructorChampion },
+      { driverChampion: driverChampion },
       { races: races },
       {
         where: { id: id },

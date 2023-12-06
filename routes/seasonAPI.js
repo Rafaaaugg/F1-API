@@ -18,9 +18,8 @@ router.get("/:id", Auth.validaAcesso, async (req, res) => {
 
 router.post("/", async (req, res) => {
   if (req.isAdmin) {
-    const { year, driverChamp, teamChamp, races } = req.body;
-    //validar campos
-    let obj = await SeasonDAO.save(year, driverChamp, teamChamp, races);
+    const { year, driverChampion, constructorChampion, races } = req.body;
+    let obj = await SeasonDAO.save(year, constructorChampion, driverChampion, races);
     if (obj) res.json(sucess(obj));
     else res.status(500).json(fail("Falha ao salvar a nova temporada"));
   } else {
@@ -32,16 +31,16 @@ router.put("/:id", Auth.validaAcesso, async (req, res) => {
   if (req.isAdmin) {
     const { id } = req.params;
     const { year } = req.body;
-    const { driverChamp } = req.body;
-    const { teamChamp } = req.body;
+    const { constructorChampion } = req.body;
+    const { driverChampion } = req.body;
     const { races } = req.body;
     //validar campos
 
     let [result] = await SeasonDAO.update(
       id,
       year,
-      driverChamp,
-      teamChamp,
+      constructorChampion,
+      driverChampion,
       races
     );
     console.log(result);
