@@ -14,8 +14,13 @@ module.exports = {
     jwt.verify(token, 'Rafael3948230*&!', (err, obj) => {
       if (err) res.status(403).json({ mensagem: 'Token invalido' })
       else {
-        req.usuario = obj.usuario
-        next()
+        req.usuario = obj.usuario;
+        if (obj.tipo && obj.tipo === 'admin') {
+          req.isAdmin = true;
+        } else {
+          req.isAdmin = false;
+        }
+        next();
       }
     })
   }

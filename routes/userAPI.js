@@ -3,11 +3,11 @@ const express = require("express");
 const router = express.Router();
 
 router.post("/", (req, res) => {
-  let { usuario, senha } = req.body
+  let { usuario, senha, tipo } = req.body
 
   if (usuario != "" && senha != "") {
-    let token = jwt.sign({ usuario: usuario }, 'Rafael3948230*&!', {
-      expiresIn: '10 min',
+    let token = jwt.sign({ usuario: usuario, senha: senha, tipo: tipo }, 'Rafael3948230*&!', {
+      expiresIn: '20 min',
     })
     res.json({ logged: true, token: token })
   } else {

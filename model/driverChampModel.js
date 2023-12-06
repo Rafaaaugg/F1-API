@@ -49,7 +49,7 @@ module.exports = {
     podium,
     championship
   ) {
-    return await SeasonModel.update(
+    return await DriverModel.update(
       { name: name },
       { contry: contry },
       { wins: wins },
@@ -71,13 +71,10 @@ module.exports = {
   },
 
   getByName: async function (name) {
-    return await DriverModel.findOne({
-      where: {
-        name: {
-          [Op.like]: "%" + name + "%",
-        },
-      },
+    const drivers = await DriverModel.findOne({
+      where: { name: name },
     });
+    return drivers;
   },
   Model: DriverModel,
 };

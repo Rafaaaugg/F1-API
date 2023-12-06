@@ -1,14 +1,28 @@
 const express = require("express");
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 const sequelize = require("../helpers/bd");
-const Auth = require('../helpers/auth')
+const Auth = require('../helpers/auth');
 const Season = require("../model/seasonModel");
 const constructor = require("../model/constructorChampModel");
 const driver = require("../model/driverChampModel");
 
-router.get("/", Auth.validaAcesso, async (req, res) => {
-  await sequelize.sync({ force: true });
+router.get("/", async (req, res) => {
 
+  /*function criarTokenAdmin() {
+    const usuario = 'admin';
+    const senha = 'admin';
+    const tipo = 'admin';
+
+    const tokenAdmin = jwt.sign({ usuario: usuario, senha: senha, tipo: tipo }, 'Rafael3948230*&!', {
+      expiresIn: '10 min',
+    });
+    console.log("Token:", tokenAdmin)
+    Auth.adminToken = tokenAdmin;
+  }*/
+
+  await sequelize.sync({ force: true });
+  //criarTokenAdmin()
   //season year, races
   //champilots nome,pais,vitorias,poles,podius,championship
   //chamcosntructors nome,pais,vitorias,poles,podiuns,chamConstructors, chamDrivers

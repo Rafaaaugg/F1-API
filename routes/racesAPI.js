@@ -23,54 +23,64 @@ router.get("/:name", Auth.validaAcesso, (req, res) => {
 });
 
 router.post("/", Auth.validaAcesso, (req, res) => {
-  const { name, season } = req.body;
+  if (req.isAdmin) {
+    const { name, season } = req.body;
 
-  //TODO validar os campos
 
-  RaceDAO.save(name, season)
-    .then((race) => {
-      res.json(sucess(race));
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(fail("Falha ao salvar a nova corrida"));
-    });
+    RaceDAO.save(name, season)
+      .then((race) => {
+        res.json(sucess(race));
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(fail("Falha ao salvar a nova corrida"));
+      });
+  } else {
+    res.status(403).json(fail("Acesso Negado"));
+  }
 });
 
 router.put("/:id", Auth.validaAcesso, (req, res) => {
-  const { id } = req.params;
-  const { name, season } = req.body;
+  if (req.isAdmin) {
+    const { id } = req.params;
+    const { name, season } = req.body;
 
-  //TODO validar os campos
-  let obj = {};
-  if (name) obj.name = name;
-  if (season) obj.season = season;
+    let obj = {};
+    if (name) obj.name = name;
+    if (season) obj.season = season;
 
-  if (obj == {}) {
-    return res.status(500).json(fail("Nenhum atributo foi modificado"));
+    if (obj == {}) {
+      return res.status(500).json(fail("Nenhum atributo foi modificado"));
+    }
+
+    RaceDAO.update(id, obj)
+      .then((race) => {
+        if (race) res.json(sucess(race));
+        else res.status(500).json(fail("Corrida não encontrada"));
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(fail("Falha ao alterar a corrida"));
+      });
+  } else {
+    res.status(403).json(fail("Acesso Negado"));
   }
-
-  RaceDAO.update(id, obj)
-    .then((race) => {
-      if (race) res.json(sucess(race));
-      else res.status(500).json(fail("Corrida não encontrada"));
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(fail("Falha ao alterar a corrida"));
-    });
 });
 
 router.delete("/:id", Auth.validaAcesso, (req, res) => {
-  RaceDAO.delete(req.params.id)
-    .then((race) => {
-      if (race) res.json(sucess(race));
-      else res.status(500).json(fail("Corrida não encontrada"));
-    })
-    .catch((err) => {
-      console.log(err);
-      res.status(500).json(fail("Falha ao excluir a corrida"));
-    });
+  if (req.isAdmin) {
+    RaceDAO.delete(req.params.id)
+      .then((race) => {
+        if (race) res.json(sucess(race));
+        else res.status(500).json(fail("Corrida não encontrada"));
+      })
+      .catch((err) => {
+        console.log(err);
+        res.status(500).json(fail("Falha ao excluir a corrida"));
+      });
+  } else {
+    res.status(403).json(fail("Acesso Negado"));
+  }
 });
 
 module.exports = router;
