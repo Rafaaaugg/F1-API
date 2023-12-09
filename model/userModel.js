@@ -46,7 +46,6 @@ module.exports = {
       {
         usuario: usuario,
         senha: senha,
-        tipo: tipo,
       },
       {
         where: { id: id },

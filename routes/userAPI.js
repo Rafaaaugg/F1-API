@@ -68,5 +68,23 @@ router.delete("/:id", Auth.validaAcesso, async (req, res) => {
 
 });
 
+router.put("/:id", Auth.validaAcesso, async (req, res) => {
+  const userId = req.params.id;
+  const { usuario, senha } = req.body;
+  const userToUpdate = await User.getUserById(userId);
+
+  if (!userToUpdate) {
+    return res.status(404).json(fail('Usuário não encontrado'));
+  }
+
+  if (req.isAdmin || userToUpdate.id == req.usuario.id) {
+    await User.updateUser(userId, usuario, senha);
+    return res.json({ success: true, message: 'Dados atualizados com sucesso' });
+  } else {
+    return res.status(403).json(fail('Permissão negada para atualizar este usuário'));
+  }
+});
+
+
 
 module.exports = router;
