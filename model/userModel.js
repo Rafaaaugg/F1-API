@@ -1,5 +1,5 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../helpers/bd");
+const { DataTypes } = require("sequelize")
+const sequelize = require("../helpers/bd")
 
 const UserModel = sequelize.define("User", {
   id: {
@@ -20,7 +20,7 @@ const UserModel = sequelize.define("User", {
     type: DataTypes.STRING,
     defaultValue: 'comum',
   },
-});
+})
 
 module.exports = {
   createUser: async function (usuario, senha, tipo) {
@@ -28,8 +28,8 @@ module.exports = {
       usuario: usuario,
       senha: senha,
       tipo: tipo,
-    });
-    return user;
+    })
+    return user
   },
 
   createAdmin: async function (usuario, senha, tipo) {
@@ -37,11 +37,11 @@ module.exports = {
       usuario: usuario,
       senha: senha,
       tipo: tipo,
-    });
-    return admin;
+    })
+    return admin
   },
 
-  updateUser: async function (id, usuario, senha, tipo) {
+  updateUser: async function (id, usuario, senha) {
     return await UserModel.update(
       {
         usuario: usuario,
@@ -50,24 +50,24 @@ module.exports = {
       {
         where: { id: id },
       }
-    );
+    )
   },
 
-  deleteUser: async function (id, userType) {
-    await UserModel.destroy({ where: { id: id } });
+  deleteUser: async function (id) {
+    await UserModel.destroy({ where: { id: id } })
     return 'Usuário excluído com sucesso'
   },
 
   getUserById: async function (id) {
-    return await UserModel.findByPk(id);
+    return await UserModel.findByPk(id)
   },
 
   getUserByUsername: async function (username) {
     const user = await UserModel.findOne({
       where: { usuario: username },
-    });
-    return user;
+    })
+    return user
   },
 
   Model: UserModel,
-};
+}

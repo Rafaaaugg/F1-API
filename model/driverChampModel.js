@@ -16,8 +16,16 @@ const DriverModel = sequelize.define("Driver", {
 });
 
 module.exports = {
-  list: async function () {
-    const drivers = await DriverModel.findAll();
+  list: async function (limite, pagina) {
+    const limitOptions = [5, 10, 30];
+    if (!limitOptions.includes(limite)) {
+      throw new Error('O limite deve ser 5, 10 ou 30');
+    }
+    const offset = (pagina - 1) * limite;
+    const drivers = await DriverModel.findAll({
+      limit: limite,
+      offset: offset
+    });
     return drivers;
   },
 

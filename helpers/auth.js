@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
-const express = require("express");
-const router = express.Router();
+const express = require("express")
+const router = express.Router()
 
 module.exports = {
   validaAcesso: (req, res, next) => {
@@ -14,14 +14,14 @@ module.exports = {
     jwt.verify(token, 'Rafael3948230*&!', (err, obj) => {
       if (err) res.status(403).json({ mensagem: 'Token invalido' })
       else {
-        req.usuario = obj.usuario;
+        req.usuario = obj.usuario
         if (obj.tipo && obj.tipo === 'admin') {
-          req.isAdmin = true;
+          req.isAdmin = true
         } else {
-          req.isAdmin = false;
+          req.isAdmin = false
         }
-        req.usuario.id = obj._id;
-        next();
+        req.usuario.id = obj._id
+        next()
       }
     })
   }

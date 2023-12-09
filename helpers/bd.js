@@ -1,4 +1,4 @@
-const Sequelize = require("sequelize");
+const Sequelize = require("sequelize")
 
 const sequelize = new Sequelize(
   process.env.DB_NAME,
@@ -9,11 +9,11 @@ const sequelize = new Sequelize(
     port: process.env.DB_PORT,
     dialect: process.env.DB_DIALECT,
   }
-);
+)
 
 sequelize
   .authenticate()
   .then(() => console.log("Conectado no Mysql!"))
-  .catch((error) => console.log(error));
+  .catch((error) => console.log(error))
 
-module.exports = sequelize;
+module.exports = sequelize

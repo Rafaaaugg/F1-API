@@ -1,5 +1,5 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../helpers/bd");
+const { DataTypes } = require("sequelize")
+const sequelize = require("../helpers/bd")
 
 const ConstructorModel = sequelize.define("Constructor", {
   id: {
@@ -14,11 +14,19 @@ const ConstructorModel = sequelize.define("Constructor", {
   podium: DataTypes.INTEGER,
   driverCampionship: DataTypes.INTEGER,
   constructorChampionship: DataTypes.INTEGER,
-});
+})
 
 module.exports = {
-  list: async function () {
-    const constructors = await ConstructorModel.findAll();
+  list: async function (limite, pagina) {
+    const limitOptions = [5, 10, 30];
+    if (!limitOptions.includes(limite)) {
+      throw new Error('O limite deve ser 5, 10 ou 30');
+    }
+    const offset = (pagina - 1) * limite;
+    const constructors = await ConstructorModel.findAll({
+      limit: limite,
+      offset: offset
+    });
     return constructors;
   },
 
@@ -39,8 +47,8 @@ module.exports = {
       podium: podium,
       driverCampionship: driverCampionship,
       constructorChampionship: constructorChampionship,
-    });
-    return constructor;
+    })
+    return constructor
   },
 
   update: async function (
@@ -64,23 +72,23 @@ module.exports = {
       {
         where: { id: id },
       }
-    );
+    )
   },
 
   delete: async function (id) {
-    return await ConstructorModel.destroy({ where: { id: id } });
+    return await ConstructorModel.destroy({ where: { id: id } })
   },
 
   getById: async function (id) {
-    return await ConstructorModel.findByPk(id);
+    return await ConstructorModel.findByPk(id)
   },
 
   getByName: async function (name) {
     const constructors = await ConstructorModel.findOne({
       where: { name: name },
-    });
-    return constructors;
+    })
+    return constructors
   },
 
   Model: ConstructorModel,
-};
+}
