@@ -13,12 +13,11 @@ const SeasonModel = sequelize.define("Season", {
   year: DataTypes.INTEGER,
 })
 
-SeasonModel.belongsTo(constructor.Model, { foreignKey: "constructorChampion" })
-SeasonModel.belongsTo(driver.Model, { foreignKey: "driverChampion" })
-SeasonModel.belongsTo(race.Model, {
-  foreignKey: "race",
-})
-SeasonModel.hasMany(race.Model, { foreignKey: "races" })
+SeasonModel.belongsTo(constructor.Model, { foreignKey: "constructorChampion" });
+SeasonModel.belongsTo(driver.Model, { foreignKey: "driverChampion" });
+SeasonModel.hasMany(race.Model, { foreignKey: "races" });
+SeasonModel.belongsTo(race.Model, { foreignKey: "races", })
+
 
 module.exports = {
 
@@ -28,7 +27,7 @@ module.exports = {
       throw new Error('O limite deve ser 5, 10 ou 30');
     }
     const offset = (pagina - 1) * limite;
-    const seasons = await DriverModel.findAll({
+    const seasons = await SeasonModel.findAll({
       limit: limite,
       offset: offset
     },
@@ -38,26 +37,29 @@ module.exports = {
     return seasons;
   },
 
-  save: async function (year, constructorChampion, driverChampion, races) {
+  save: async function (year, constructorChampionId, driverChampionId, races) {
     const season = await SeasonModel.create({
       year: year,
-      constructorChampion: constructorChampion,
-      driverChampion: driverChampion,
+      constructorChampion: constructorChampionId,
+      driverChampion: driverChampionId,
       races: races,
-    })
-    return season
+    });
+
+    return season;
   },
 
-  update: async function (id, year, constructorChampion, driverChampion, races) {
+  update: async function (id, year, constructorChampionId, driverChampionId, races) {
     return await SeasonModel.update(
-      { year: year },
-      { constructorChampion: constructorChampion },
-      { driverChampion: driverChampion },
-      { races: races },
       {
-        where: { id: id },
+        year: year,
+        constructorChampion: constructorChampionId,
+        driverChampion: driverChampionId,
+        races: races
+      },
+      {
+        where: { id: id }
       }
-    )
+    );
   },
 
   delete: async function (id) {
