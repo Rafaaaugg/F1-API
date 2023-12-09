@@ -1,15 +1,17 @@
-var express = require("express");
-var path = require("path");
+const express = require("express");
+const path = require("path");
 require("dotenv").config();
+const swaggerUI = require('swagger-ui-express')
+const swaggerFile = require('./swagger_doc.json')
 
-var indexRouter = require("./routes/initF1");
-var loginRouter = require("./routes/userAPI");
-var seasonRouter = require("./routes/seasonAPI");
-var driverChampRouter = require("./routes/driverChampAPI");
-var constructorChampRouter = require("./routes/constructorChampAPI");
-var racesRouter = require("./routes/racesAPI");
+const indexRouter = require("./routes/initF1");
+const loginRouter = require("./routes/userAPI");
+const seasonRouter = require("./routes/seasonAPI");
+const driverChampRouter = require("./routes/driverChampAPI");
+const constructorChampRouter = require("./routes/constructorChampAPI");
+const racesRouter = require("./routes/racesAPI");
 
-var app = express();
+const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -20,6 +22,7 @@ app.use("/season", seasonRouter);
 app.use("/driver", driverChampRouter);
 app.use("/constructor", constructorChampRouter);
 app.use("/races", racesRouter);
+app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerFile));
 
 app.use(function (err, req, res, next) {
   res.locals.message = err.message;

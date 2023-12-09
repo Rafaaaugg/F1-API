@@ -20,6 +20,7 @@ module.exports = {
         } else {
           req.isAdmin = false;
         }
+        req.usuario.id = obj._id;
         next();
       }
     })

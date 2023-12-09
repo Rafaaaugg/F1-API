@@ -4,14 +4,14 @@ const jwt = require('jsonwebtoken');
 const { success, fail } = require("../helpers/resposta");
 const User = require("../model/userModel")
 const Auth = require('../helpers/auth')
+const id = 0
 
 router.post("/", (req, res) => {
   let { usuario, senha } = req.body;
-
   if (usuario && senha) {
     User.createUser(usuario, senha, 'comum')
       .then((user) => {
-        let token = jwt.sign({ usuario: user.usuario, tipo: user.tipo }, 'Rafael3948230*&!', {
+        let token = jwt.sign({ usuario: user.usuario, tipo: user.tipo, id: user.id }, 'Rafael3948230*&!', {
           expiresIn: '20 min',
         });
         res.json({ logged: true, token: token });
@@ -31,7 +31,7 @@ router.post("/CreateAdmin", Auth.validaAcesso, (req, res) => {
     if (usuario && senha) {
       User.createAdmin(usuario, senha, 'admin')
         .then((user) => {
-          let token = jwt.sign({ usuario: user.usuario, tipo: user.tipo }, 'Rafael3948230*&!', {
+          let token = jwt.sign({ usuario: user.usuario, tipo: user.tipo, id: user.id }, 'Rafael3948230*&!', {
             expiresIn: '20 min',
           });
           res.json({ logged: true, token: token });
@@ -73,11 +73,14 @@ router.put("/:id", Auth.validaAcesso, async (req, res) => {
   const { usuario, senha } = req.body;
   const userToUpdate = await User.getUserById(userId);
 
+  console.log('ID do usuário passado por parâmetro:', userId);
+  console.log('ID do usuário autenticado no token:', req.usuario.id);
+
   if (!userToUpdate) {
     return res.status(404).json(fail('Usuário não encontrado'));
   }
 
-  if (req.isAdmin || userToUpdate.id == req.usuario.id) {
+  if (req.isAdmin || userToUpdate.id == req.params.id) {
     await User.updateUser(userId, usuario, senha);
     return res.json({ success: true, message: 'Dados atualizados com sucesso' });
   } else {
