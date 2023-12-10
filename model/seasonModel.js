@@ -11,13 +11,10 @@ const SeasonModel = sequelize.define("Season", {
     primaryKey: true,
   },
   year: DataTypes.INTEGER,
-})
-
+});
 SeasonModel.belongsTo(constructor.Model, { foreignKey: "constructorChampion" });
 SeasonModel.belongsTo(driver.Model, { foreignKey: "driverChampion" });
-SeasonModel.hasMany(race.Model, { foreignKey: "races" });
-SeasonModel.belongsTo(race.Model, { foreignKey: "races", })
-
+SeasonModel.belongsToMany(race.Model, { through: "SeasonRace", foreignKey: "seasonId" });
 
 module.exports = {
 
@@ -27,13 +24,16 @@ module.exports = {
       throw new Error('O limite deve ser 5, 10 ou 30');
     }
     const offset = (pagina - 1) * limite;
+
     const seasons = await SeasonModel.findAll({
       limit: limite,
-      offset: offset
-    },
-      { include: constructor.Model },
-      { include: driver.Model },
-      { include: race.Model });
+      offset: offset,
+    });
+
+    for (let i = 0; i < seasons.length; i++) {
+      seasons[i].dataValues.races = await this.getRacesBySeason(seasons[i].id);
+    }
+
     return seasons;
   },
 
@@ -42,24 +42,24 @@ module.exports = {
       year: year,
       constructorChampion: constructorChampionId,
       driverChampion: driverChampionId,
-      races: races,
     });
 
+    await season.addRaces(races);
     return season;
   },
 
   update: async function (id, year, constructorChampionId, driverChampionId, races) {
-    return await SeasonModel.update(
-      {
-        year: year,
-        constructorChampion: constructorChampionId,
-        driverChampion: driverChampionId,
-        races: races
-      },
-      {
-        where: { id: id }
-      }
-    );
+    const season = await SeasonModel.findByPk(id);
+    if (!season) {
+      throw new Error('Temporada não encontrada');
+    }
+
+    await season.setRaces(races);
+    return await season.update({
+      year: year,
+      constructorChampion: constructorChampionId,
+      driverChampion: driverChampionId,
+    });
   },
 
   delete: async function (id) {
@@ -72,6 +72,16 @@ module.exports = {
 
   getByYear: async function (year) {
     return await SeasonModel.findOne({ where: { year: year } })
+  },
+
+  getRacesBySeason: async function (seasonId) {
+    const season = await SeasonModel.findByPk(seasonId);
+    if (!season) {
+      throw new Error('Temporada não encontrada');
+    }
+
+    const races = await season.getRaces();
+    return races;
   },
 
   Model: SeasonModel,

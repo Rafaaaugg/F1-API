@@ -89,8 +89,15 @@ router.get("/", async (req, res) => {
     race31, race32, race33, race34, race35, race36, race37, race38,
   ]
 
-  let season1 = await Season.save(1950, constructor1.id, driver1.id, [race1.id, race2.id])
-  let lSeasons = [season1]
+  let season1 = await Season.save(1950, constructor1.id, driver1.id, [race1, race2, race3, race4, race5, race6, race7])
+  let season2 = await Season.save(1960, constructor1.id, driver1.id, [race8, race2, race3, race9, race5, race6, race1, race10, race7, race11])
+  let season3 = await Season.save(1970, constructor1.id, driver1.id, [race12, race13, race2, race5, race9, race6, race1, race14, race15, race7, race16, race11, race17])
+  let season4 = await Season.save(1980, constructor1.id, driver1.id, [race8, race18, race12, race19, race5, race2, race6, race1, race14, race15, race9, race7, race16, race11])
+  let season5 = await Season.save(1990, constructor1.id, driver1.id, [race11, race18, race20, race2, race16, race17, race6, race1, race14, race21, race5, race7, race10, race13, race22, race23])
+  let season6 = await Season.save(2000, constructor1.id, driver1.id, [race23, race18, race20, race1, race13, race24, race2, race16, race6, race15, race14, race21, race5, race7, race11, race22, race25])
+  let season7 = await Season.save(2010, constructor1.id, driver1.id, [race26, race23, race25, race27, race13, race2, race28, race16, race24, race1, race14, race21, race5, race7, race29, race22, race30, race18, race31])
+  let season8 = await Season.save(2020, constructor1.id, driver1.id, [race15, race32, race21, race1, race33, race13, race5, race7, race34, race35, race36, race10, race37, race28, race26, race38, race31])
+  let lSeasons = [season1, season2, season3, season4, season5, season6, season7, season8]
 
   let responseData = {
     status: true,
