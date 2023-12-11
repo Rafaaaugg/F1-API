@@ -1,5 +1,5 @@
-const { DataTypes } = require("sequelize");
-const sequelize = require("../helpers/bd");
+const { DataTypes } = require("sequelize")
+const sequelize = require("../helpers/bd")
 
 const DriverModel = sequelize.define("Driver", {
   id: {
@@ -13,20 +13,20 @@ const DriverModel = sequelize.define("Driver", {
   polePosition: DataTypes.INTEGER,
   podium: DataTypes.INTEGER,
   championship: DataTypes.INTEGER,
-});
+})
 
 module.exports = {
   list: async function (limite, pagina) {
-    const limitOptions = [5, 10, 30];
+    const limitOptions = [5, 10, 30]
     if (!limitOptions.includes(limite)) {
-      throw new Error('O limite deve ser 5, 10 ou 30');
+      throw new Error('O limite deve ser 5, 10 ou 30')
     }
-    const offset = (pagina - 1) * limite;
+    const offset = (pagina - 1) * limite
     const drivers = await DriverModel.findAll({
       limit: limite,
       offset: offset
-    });
-    return drivers;
+    })
+    return drivers
   },
 
   save: async function (
@@ -44,8 +44,8 @@ module.exports = {
       polePosition: polePosition,
       podium: podium,
       championship: championship,
-    });
-    return driver;
+    })
+    return driver
   },
 
   update: async function (
@@ -67,22 +67,22 @@ module.exports = {
       {
         where: { id: id },
       }
-    );
+    )
   },
 
   delete: async function (id) {
-    return await DriverModel.destroy({ where: { id: id } });
+    return await DriverModel.destroy({ where: { id: id } })
   },
 
   getById: async function (id) {
-    return await DriverModel.findByPk(id);
+    return await DriverModel.findByPk(id)
   },
 
   getByName: async function (name) {
     const drivers = await DriverModel.findOne({
       where: { name: name },
-    });
-    return drivers;
+    })
+    return drivers
   },
   Model: DriverModel,
-};
+}

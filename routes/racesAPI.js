@@ -30,7 +30,7 @@ router.get("/:name", Auth.validaAcesso, (req, res) => {
 
 router.post("/", Auth.validaAcesso, (req, res) => {
   if (req.isAdmin) {
-    const { name} = req.body
+    const { name } = req.body
     RaceDAO.save(name)
       .then((race) => {
         res.json(sucess(race))
@@ -47,7 +47,7 @@ router.post("/", Auth.validaAcesso, (req, res) => {
 router.put("/:id", Auth.validaAcesso, (req, res) => {
   if (req.isAdmin) {
     const { id } = req.params
-    const { name} = req.body
+    const { name } = req.body
 
     let obj = {}
     if (name) obj.name = name

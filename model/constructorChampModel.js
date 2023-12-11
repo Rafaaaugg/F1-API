@@ -18,16 +18,16 @@ const ConstructorModel = sequelize.define("Constructor", {
 
 module.exports = {
   list: async function (limite, pagina) {
-    const limitOptions = [5, 10, 30];
+    const limitOptions = [5, 10, 30]
     if (!limitOptions.includes(limite)) {
-      throw new Error('O limite deve ser 5, 10 ou 30');
+      throw new Error('O limite deve ser 5, 10 ou 30')
     }
-    const offset = (pagina - 1) * limite;
+    const offset = (pagina - 1) * limite
     const constructors = await ConstructorModel.findAll({
       limit: limite,
       offset: offset
-    });
-    return constructors;
+    })
+    return constructors
   },
 
   save: async function (
